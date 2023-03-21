@@ -1,27 +1,29 @@
 document.getElementById('calculator').addEventListener('submit', (event) => {
     event.preventDefault();
-
+    const type = document.getElementById('type').value;
     const length = parseFloat(document.getElementById('length').value);
     const width = parseFloat(document.getElementById('width').value);
     const depth = parseFloat(document.getElementById('depth').value);
-    const concreteType = document.getElementById('concreteType').value;
+    if (type && length && width && depth) {
+        const area = length * width;
+        const volume = area * (depth / 12);
+        const yards = volume / 27;
+        let cost;
 
-    if (length && width && depth && concreteType) {
-        const volume = (length * width * (depth / 12)).toFixed(2);
-        const cost = calculateCost(volume, concreteType);
-        const result = `The required volume of concrete is ${volume} cubic feet. The estimated cost is $${cost.toFixed(2)}.`;
-        document.getElementById('result').innerText = result;
+        switch (type) {
+            case 'standard':
+                cost = 5600;
+                break;
+            case 'colored':
+                cost = 6463.33;
+                break;
+            case 'stamped':
+                cost = 13463.33;
+                break;
+        }
+        const result = `Total cost: $${cost.toFixed(2)}<br><br>Check your email for the estimate. Remember that having us come to the job and do a field measure and assessment will get you a 10% discount on the entire bill and possibly up to 25% on the entire project once we get a true measurement and understand the project better.`;
+        document.getElementById('result').innerHTML = result;
     } else {
-        document.getElementById('result').innerText = 'Please enter valid values for length, width, depth, and concrete type.';
+        document.getElementById('result').innerText = 'Please select a concrete type and enter valid values for length, width, and depth.';
     }
 });
-
-function calculateCost(volume, concreteType) {
-    const costPerCubicFoot = {
-        standard: 100, // Cost per cubic foot for standard concrete
-        colored: 120,  // Cost per cubic foot for colored concrete
-        stamped: 150   // Cost per cubic foot for stamped concrete
-    };
-
-    return volume * costPerCubicFoot[concreteType];
-}
